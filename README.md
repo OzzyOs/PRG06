@@ -1,2 +1,7 @@
 # PRG06
-Fullstack Webapp using the MERN stack.
+
+# Product Controller
+    Within for the controller 
+# Product Routes
+# Product Methods
+# Product Model
