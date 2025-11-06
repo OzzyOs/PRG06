@@ -67,19 +67,19 @@ export const createProduct = async (req, res) => {
 
     const acceptHeader = req.headers['accept'];
 
-    if (acceptHeader.includes('application/json')) {
-        return res.json({message: "accepted product"});
-    }
+    // if (acceptHeader.includes('application/json')) {
+    //     return res.json({message: "accepted product"});
+    // }
 
     const newProduct = new Product(product);
 
     try {
         await newProduct.save();
 
-        const selfLink = `${baseUrl}/api/products/${newProduct._id}`
-        const collectionLink = `${baseUrl}/api/products`;
+        const selfLink = `${baseUrl}/${newProduct._id}`
+        const collectionLink = `${baseUrl}`;
 
-        res.status(200).json({success: true, product: newProduct, _links: {
+        res.status(201).json({success: true, product: newProduct, _links: {
             self:{ href: selfLink },
                 collection: {href : collectionLink}
             }});
