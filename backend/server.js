@@ -8,7 +8,7 @@ import productRoutes from "./routes/product.route.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = 3000;
 
 app.use(cors({ // Cross-Origin Resource Sharing, allows origin string to load resources. Normally fetch() has the same origin policy.
     origin:'*', // Open to all origins, only use during development.
