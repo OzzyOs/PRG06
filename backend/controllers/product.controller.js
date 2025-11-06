@@ -12,15 +12,28 @@ export const getProducts = async (req, res) => {
         const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;
         console.log(req.get('host'))
 
+        // Add individual links to each product
+        const productsWithLinks = products.map(product => ({
+            ...product.toObject(),
+            _links: {
+                self: {
+                    href: `${baseUrl}/${product._id}`,
+                },
+                collection: {
+                    href: baseUrl,
+                }
+            }
+        }));
+
         // Add links into the response for formatting, let the model focus on data structure.
         const response = {
             items:products,
             _links:{
                 self:{
-                    href:{href: baseUrl },
+                    href: baseUrl,
                 },
                 collection: {
-                    href:{href: baseUrl},
+                    href: baseUrl,
                 }
             }
         }
