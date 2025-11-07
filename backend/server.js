@@ -12,15 +12,25 @@ const PORT = 3000;
 
 app.use(cors({ // Cross-Origin Resource Sharing, allows origin string to load resources. Normally fetch() has the same origin policy.
     origin:'*', // Open to all origins, only use during development.
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed methods.
-    allowedHeaders: ['Content-Type', 'Accept'], // Allowed headers.
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'], // Allowed methods.
+    allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'], // Allowed headers.
 }));
 
-app.options('*', (req, res) => {
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.set('Allow', 'GET, POST, PUT, DELETE');
+app.options('*', (req, res) => { // Handle OPTION Preflight requests.
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Any origin can make requests.
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD'); // These HTTP methods are allowed.
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With'); // These headers are allowed in requests.
+    res.setHeader('Access-Control-Max-Age', '86400'); // Set cache preflight 24 hours, reduces repeated OPTIONS requests for optimization.
+    res.set('Allow', 'GET, POST, PUT, DELETE, OPTIONS, HEAD'); // Inform client of allowed methods.
     res.status(204).end();
 }); // Explicitly handle OPTIONS preflight requests
+
+app.use((req, res, next) => { // General web security headers middleware
+    res.setHeader('X-Content-Type-Options', 'nosniff'); // Prevent MIME type sniffing
+    res.setHeader('X-Frame-Options', 'DENY');
+    res.setHeader('X-XSS-Protection', '1; mode=block'); // Enable XSS protection
+    next();
+})
 
 app.use(express.json()); // Allows for json data to be accepted in the body.
 
