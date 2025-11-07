@@ -30,18 +30,6 @@ const productSchema = mongoose.Schema({
         toObject: { virtuals: true },
     });
 
-productSchema.virtual('_links').get(
-    function () {
-        return {
-            self: {
-                href: `${process.env.BASE_URI}${this._id}`,
-            },
-            collection: {
-                href: `${process.env.BASE_URI}`,
-            }
-        }
-})
-
 const Product = mongoose.model("Product", productSchema);
 // products
 

@@ -27,7 +27,7 @@ export const getProducts = async (req, res) => {
 
         // Add links into the response for formatting, let the model focus on data structure.
         const response = {
-            items:products,
+            items:productsWithLinks,
             _links:{
                 self:{
                     href: baseUrl,
@@ -55,11 +55,30 @@ export const getProducts = async (req, res) => {
 // getProductById does an async request to a resource based on it's id.
 export const getProductById = async (req, res) => {
     try {
+        const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;
+
         // Create a product variable that tries to find `product data` by the provided ${params.id}.
         const product = await Product.findById(req.params.id);
 
+         if (!product) {
+            return res.status(404).json({success: false, message: "Product not found."});
+        }
+
+        const response = {
+            success: true, 
+            items: product,
+            _links: {
+                self: {
+                    href: `${baseUrl}/${product._id}`
+                },
+                collection: {
+                    href: baseUrl
+                }
+            }
+        };
+
         // If successful, update the state with the retrieved `data` (`i.e., product').
-        res.status(200).json({success: true, items: product});
+        res.status(200).json(response);
     }
     catch (error) {
         console.log("error in getProductById:", error);
