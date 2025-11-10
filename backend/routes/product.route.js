@@ -16,10 +16,11 @@ router.post('/', createProduct); // This route uses the 'createProduct' function
 // DELETE
 router.delete('/:id', deleteProduct); // This route uses the 'deleteProduct' function in the product.controller.js.
                                       // This route will need an id.
-
 // PUT
 router.put('/:id', updateProduct); // This route uses the 'updateProduct' function in the product.controller.js
                                    // This route will need an id.
-
+// PATCH
+router.patch('/:id', patchProduct); // This route uses the 'patchProduct' function in the product.controller.js
+                                     // This route will need an id.
 export default router;
 

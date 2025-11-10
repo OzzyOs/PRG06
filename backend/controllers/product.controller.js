@@ -123,7 +123,7 @@ export const createProduct = async (req, res) => {
 
 // deleteProduct does an async request to delete a resource based on it's id.
 export const deleteProduct = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({success: false, message: "Product id not found."});
@@ -138,9 +138,9 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
-// updateProduct does an async request to update a specific resource based on it's id.
+// updateProduct (PUT) does an async request to update a specific resource based on it's id.
 export const updateProduct = async (req, res) => {
-    const {id} = req.params;
+    const { id } = req.params;
 
     const product = req.body;
 
@@ -153,6 +153,37 @@ export const updateProduct = async (req, res) => {
         res.status(200).json({success: true, product: updatedProduct});
     } catch (error) {
         console.error("Error in Update Product", error.message);
+        res.status(500).json({success: false, message: "Product not found"});
+    }
+}
+
+// update product partially (PATCH).
+export const patchProduct = async (req, res) => {
+    const { id } = req.params;
+    const product = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(404).json({success: false, message: "Product id not found."});
+    }
+
+    try {
+        const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;
+        const patchedProduct = await Product.findByIdAndUpdate(id, product, { new: true, runValidators: true });
+
+        if(!patchedProduct) {
+            return res.status(404).json({ success: false, message: "Product not found." });
+        }
+
+        res.status(200).json({
+            success: true, 
+            product: patchedProduct, 
+            _links:{
+                self:{ href: `${baseUrl}/${patchedProduct._id}` },
+                collection: { href: baseUrl }
+        }
+    });
+    } catch (error) {
+        console.error("Error in Patch Product", error.message);
         res.status(500).json({success: false, message: "Product not found"});
     }
 }

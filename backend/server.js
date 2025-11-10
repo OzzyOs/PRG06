@@ -12,13 +12,13 @@ const PORT = 3000;
 
 app.use(cors({ // Cross-Origin Resource Sharing, allows origin string to load resources. Normally fetch() has the same origin policy.
     origin:'*', // Open to all origins, only use during development.
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'], // Allowed methods.
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'], // Allowed methods.
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'], // Allowed headers.
 }));
 
 app.options('*', (req, res) => { // Handle OPTION Preflight requests.
     res.setHeader('Access-Control-Allow-Origin', '*'); // Any origin can make requests.
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, HEAD'); // These HTTP methods are allowed.
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD'); // These HTTP methods are allowed.
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Accept, Authorization, X-Requested-With'); // These headers are allowed in requests.
     res.setHeader('Access-Control-Max-Age', '86400'); // Set cache preflight 24 hours, reduces repeated OPTIONS requests for optimization.
     res.set('Allow', 'GET, POST, PUT, DELETE, OPTIONS, HEAD'); // Inform client of allowed methods.
