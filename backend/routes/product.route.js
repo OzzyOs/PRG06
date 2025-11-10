@@ -1,5 +1,5 @@
 import express from 'express';
-import {createProduct, deleteProduct, getProducts, updateProduct, getProductById} from "../controllers/product.controller.js";
+import {createProduct, deleteProduct, getProducts, replaceProduct, patchProduct ,getProductById} from "../controllers/product.controller.js";
 const router = express.Router();
 
 // This is where all routes are declared, here you can see whether the api route
@@ -17,7 +17,7 @@ router.post('/', createProduct); // This route uses the 'createProduct' function
 router.delete('/:id', deleteProduct); // This route uses the 'deleteProduct' function in the product.controller.js.
                                       // This route will need an id.
 // PUT
-router.put('/:id', updateProduct); // This route uses the 'updateProduct' function in the product.controller.js
+router.put('/:id', replaceProduct); // This route uses the 'replaceProduct' function in the product.controller.js
                                    // This route will need an id.
 // PATCH
 router.patch('/:id', patchProduct); // This route uses the 'patchProduct' function in the product.controller.js

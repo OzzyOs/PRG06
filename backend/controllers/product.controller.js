@@ -124,13 +124,13 @@ export const createProduct = async (req, res) => {
 // deleteProduct does an async request to delete a resource based on it's id.
 export const deleteProduct = async (req, res) => {
     const { id } = req.params;
-    const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;   
      
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({success: false, message: "Product id not found."});
     }
 
     try {
+        const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;   
         await Product.findByIdAndDelete(id);
         res.status(200).json({
             success: true,
@@ -146,18 +146,22 @@ export const deleteProduct = async (req, res) => {
     }
 }
 
-// updateProduct (PUT) does an async request to update a specific resource based on it's id.
-export const updateProduct = async (req, res) => {
+// replaceProduct (PUT) does an async request to update a specific resource based on it's id.
+export const replaceProduct = async (req, res) => {
     const { id } = req.params;
-    const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;
-
     const product = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(404).json({success: false, message: "Product id not found."});
     }
+    
+    // PUT method requires all fields (complete replacement).
+    if (!product.name || !product.price || !product.description || !product.rating) {
+        return res.status(400).json({success: false, message: 'Please fill in all required fields: name, price, rating and description.'});
+    }
 
     try {
+        const baseUrl = `${req.protocol}://${req.get('host')}/api/products`;
         const updatedProduct =  await Product.findByIdAndUpdate(id, product,{new:true});
 
         if (!updatedProduct) {
